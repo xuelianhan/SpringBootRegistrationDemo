@@ -25,8 +25,10 @@ Additional functions
 > $ docker image ls
 > $ docker run -d -p 8080:8080 register-demo
  - You can make it executable by running the following command:
+> ```bash
 > $ chmod +x build_and_run.sh
  - To build and run the Spring Boot application, you can simply run the bash script file as follows:
+> ```bash
 > $ ./build_and_run.sh
 
 This will compile the application, build a Docker image from the compiled application, 
