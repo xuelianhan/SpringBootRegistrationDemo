@@ -77,6 +77,7 @@ public class AccountAppService {
     }
 
 
+
     @Transactional
     public ResponseEntity<?> registerUser(RegisterRequest registerRequest) {
         if (appUserRepository.existsByUsername(registerRequest.getUsername())) {
