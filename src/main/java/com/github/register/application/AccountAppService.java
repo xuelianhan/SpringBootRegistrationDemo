@@ -123,7 +123,7 @@ public class AccountAppService {
         user.setRoles(roles);
         appUserRepository.save(user);
 
-        // sending event of welcome-email.
+        // sending event of welcome-email after the successful completion of registration transaction.
         eventPublisher.publishEvent(new UserRegistrationEvent(this, user.getUsername(), user.getEmail()));
 
         return CommonResponse.success("User registered successfully!");
