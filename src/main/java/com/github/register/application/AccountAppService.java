@@ -95,7 +95,7 @@ public class AccountAppService {
         Set<AuthRole> roles = new HashSet<>();
 
         AuthRole authRole = null;
-        if (strRoles == null) {
+        if (strRoles == null || strRoles.isEmpty()) {
             authRole = authRoleRepository.findByRoleName(RoleEnum.ROLE_USER)
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
             roles.add(authRole);
