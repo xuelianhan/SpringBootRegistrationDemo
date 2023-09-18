@@ -2,7 +2,7 @@ package com.github.register.resource;
 
 import com.github.register.application.EmailService;
 import com.github.register.domain.mail.Email;
-import com.github.register.domain.payload.response.MessageResponse;
+import com.github.register.domain.payload.response.CodeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -102,10 +102,11 @@ public class TestController {
 
             emailService.sendSimpleMessage(email);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(new MessageResponse("Error: Email sent failed!"));
+
+            return ResponseEntity.badRequest().body(new CodeMessage(-1, "Error: Email sent failed!"));
         }
 
-        return ResponseEntity.ok(new MessageResponse("Email has sent successfully!"));
+        return ResponseEntity.ok(new CodeMessage(0, "Email has sent successfully!"));
     }
 
 }

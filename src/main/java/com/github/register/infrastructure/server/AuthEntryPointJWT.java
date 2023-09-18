@@ -1,4 +1,4 @@
-package com.github.register.domain.auth.service;
+package com.github.register.infrastructure.server;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;

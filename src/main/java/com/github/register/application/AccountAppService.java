@@ -1,16 +1,17 @@
 package com.github.register.application;
 
 import com.github.register.domain.auth.AuthenticAppUser;
-import com.github.register.domain.auth.service.JWTAccessTokenService;
+import com.github.register.infrastructure.server.JWTAccessTokenService;
 import com.github.register.domain.payload.request.LoginRequest;
 import com.github.register.domain.payload.request.RegisterRequest;
-import com.github.register.domain.payload.response.MessageResponse;
+import com.github.register.domain.payload.response.CodeMessage;
 import com.github.register.domain.payload.response.UserInfoResponse;
 import com.github.register.domain.role.AuthRole;
 import com.github.register.domain.role.AuthRoleRepository;
 import com.github.register.domain.role.RoleEnum;
 import com.github.register.domain.user.AppUser;
 import com.github.register.domain.user.AppUserRepository;
+import com.github.register.infrastructure.server.CommonResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
@@ -33,7 +34,7 @@ import java.util.stream.Collectors;
  * @date 18 Sep 2023
  */
 @Service
-public class UserApplicationService {
+public class AccountAppService {
 
     @Autowired
     AuthenticationManager authenticationManager;
@@ -61,20 +62,21 @@ public class UserApplicationService {
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
 
-        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
-                .body(new UserInfoResponse(userDetails.getId(),
-                        userDetails.getUsername(),
-                        userDetails.getEmail(),
-                        roles));
+        UserInfoResponse body = new UserInfoResponse(userDetails.getId(),
+                userDetails.getUsername(),
+                userDetails.getEmail(),
+                roles);
+
+        return CommonResponse.success(HttpHeaders.SET_COOKIE, jwtCookie.toString(), body);
     }
 
 
-    public ResponseEntity<?>  registerUser(RegisterRequest registerRequest) {
+    public ResponseEntity<?> registerUser(RegisterRequest registerRequest) {
         if (appUserRepository.existsByUsername(registerRequest.getUsername())) {
-            return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!"));
+            return CommonResponse.badRequest("Error: Username is already taken!");
         }
         if (appUserRepository.existsByEmail(registerRequest.getEmail())) {
-            return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use!"));
+            return CommonResponse.badRequest("Error: Email is already in use!");
         }
 
         // Create new user's account
@@ -118,12 +120,12 @@ public class UserApplicationService {
             //send mail here
         });
 
-        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+        return CommonResponse.success("User registered successfully!");
     }
 
     public ResponseEntity<?> logout() {
         ResponseCookie cookie = jwtAccessTokenService.getCleanJwtCookie();
-        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString())
-                .body(new MessageResponse("You've been signed out!"));
+        CodeMessage body = new CodeMessage(0, "You've been logged out!");
+        return CommonResponse.success(HttpHeaders.SET_COOKIE, cookie.toString(), body);
     }
 }

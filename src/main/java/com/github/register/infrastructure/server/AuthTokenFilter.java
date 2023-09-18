@@ -1,5 +1,6 @@
-package com.github.register.domain.auth.service;
+package com.github.register.infrastructure.server;
 
+import com.github.register.domain.auth.service.AuthenticAppUserDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

@@ -1,7 +1,7 @@
 package com.github.register.infrastructure.config;
 
-import com.github.register.domain.auth.service.AuthEntryPointJWT;
-import com.github.register.domain.auth.service.AuthTokenFilter;
+import com.github.register.infrastructure.server.AuthEntryPointJWT;
+import com.github.register.infrastructure.server.AuthTokenFilter;
 import com.github.register.domain.auth.service.AuthenticAppUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -40,10 +40,8 @@ public class WebSecurityConfig {
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-
         authProvider.setUserDetailsService(authenticAppUserDetailsService);
         authProvider.setPasswordEncoder(passwordEncoder());
-
         return authProvider;
     }
 
@@ -63,10 +61,13 @@ public class WebSecurityConfig {
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(authEntryPointJWT))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/api/v1/auth/**").permitAll()
+                        auth.requestMatchers("/api/v1/auth/**", "/api/v1/users/**").permitAll()
                                 .requestMatchers("/api/v1/test/**").permitAll()
                                 .anyRequest().authenticated()
-                );
+                ).logout((logout) -> {
+                    logout.deleteCookies()
+                            .clearAuthentication(true);
+                });
 
         http.authenticationProvider(authenticationProvider());
 

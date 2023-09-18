@@ -1,4 +1,4 @@
-package com.github.register.domain.auth.service;
+package com.github.register.infrastructure.server;
 
 import com.github.register.domain.auth.AuthenticAppUser;
 import io.jsonwebtoken.*;

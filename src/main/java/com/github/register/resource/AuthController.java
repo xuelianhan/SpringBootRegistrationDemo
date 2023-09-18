@@ -1,6 +1,6 @@
 package com.github.register.resource;
 
-import com.github.register.application.UserApplicationService;
+import com.github.register.application.AccountAppService;
 import com.github.register.domain.payload.request.LoginRequest;
 import com.github.register.domain.payload.request.RegisterRequest;
 import jakarta.validation.Valid;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     @Autowired
-    UserApplicationService userApplicationService;
+    AccountAppService accountAppService;
 
 
     /**
@@ -51,7 +51,7 @@ public class AuthController {
      */
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-        return userApplicationService.authenticateUser(loginRequest);
+        return accountAppService.authenticateUser(loginRequest);
     }
 
     /**
@@ -70,7 +70,7 @@ public class AuthController {
      */
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody RegisterRequest registerRequest) {
-        return userApplicationService.registerUser(registerRequest);
+        return accountAppService.registerUser(registerRequest);
     }
 
     /**
@@ -82,6 +82,6 @@ public class AuthController {
      */
     @PostMapping("/logout")
     public ResponseEntity<?> logoutUser() {
-        return userApplicationService.logout();
+        return accountAppService.logout();
     }
 }
