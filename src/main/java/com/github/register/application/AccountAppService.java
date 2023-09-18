@@ -1,6 +1,7 @@
 package com.github.register.application;
 
 import com.github.register.domain.auth.AuthenticAppUser;
+import com.github.register.domain.event.UserRegistrationEvent;
 import com.github.register.infrastructure.server.JWTAccessTokenService;
 import com.github.register.domain.payload.request.LoginRequest;
 import com.github.register.domain.payload.request.RegisterRequest;
@@ -13,6 +14,7 @@ import com.github.register.domain.user.AppUser;
 import com.github.register.domain.user.AppUserRepository;
 import com.github.register.infrastructure.server.CommonResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
@@ -22,11 +24,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 /**
@@ -51,6 +53,10 @@ public class AccountAppService {
     @Autowired
     JWTAccessTokenService jwtAccessTokenService;
 
+
+    @Autowired
+    ApplicationEventPublisher eventPublisher;
+
     public ResponseEntity<?> authenticateUser(LoginRequest loginRequest) {
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
@@ -71,6 +77,7 @@ public class AccountAppService {
     }
 
 
+    @Transactional
     public ResponseEntity<?> registerUser(RegisterRequest registerRequest) {
         if (appUserRepository.existsByUsername(registerRequest.getUsername())) {
             return CommonResponse.badRequest("Error: Username is already taken!");
@@ -116,9 +123,8 @@ public class AccountAppService {
         user.setRoles(roles);
         appUserRepository.save(user);
 
-        CompletableFuture.runAsync(() -> {
-            //send mail here
-        });
+        // sending event of welcome-email.
+        eventPublisher.publishEvent(new UserRegistrationEvent(this, user.getUsername(), user.getEmail()));
 
         return CommonResponse.success("User registered successfully!");
     }

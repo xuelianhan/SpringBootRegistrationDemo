@@ -7,10 +7,10 @@ import jakarta.validation.constraints.NotBlank;
  * @date 17 Sep 2023
  */
 public class LoginRequest {
-    @NotBlank
+    @NotBlank(message = "The username field cannot be blank")
     private String username;
 
-    @NotBlank
+    @NotBlank(message = "The password field cannot be blank")
     private String password;
 
     public String getUsername() {

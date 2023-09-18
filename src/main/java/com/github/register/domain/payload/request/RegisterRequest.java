@@ -12,18 +12,18 @@ import java.util.Set;
  */
 public class RegisterRequest {
 
-    @NotBlank
+    @NotBlank(message = "The username field cannot be blank")
     @Size(min = 3, max = 20)
     private String username;
 
-    @NotBlank
+    @NotBlank(message = "The email field cannot be blank")
     @Size(max = 50)
     @Email
     private String email;
 
     private Set<String> role;
 
-    @NotBlank
+    @NotBlank(message = "The password field cannot be blank")
     @Size(min = 6, max = 40)
     private String password;
 

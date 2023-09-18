@@ -75,7 +75,7 @@ public class UserController {
      * @return
      */
     @PutMapping("{id}")
-    public ResponseEntity editUser(@PathVariable("id") Integer id, @Validated @RequestBody UserInfoRequest userInfoRequest) {
+    public ResponseEntity editUser(@PathVariable("id") Integer id, @Validated @RequestBody @NotConflictAppUser UserInfoRequest userInfoRequest) {
         return CommonResponse.run(
                 () -> userAppService.edit(id, userInfoRequest)
         );
