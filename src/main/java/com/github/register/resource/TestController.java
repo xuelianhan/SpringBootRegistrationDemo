@@ -40,14 +40,14 @@ public class TestController {
      *
      * Step-2: e.g. GET http://127.0.0.1:8080/api/v1/auth/login
      * {
-     *     "username":"evilsniper",
+     *     "username":"sniper",
      *     "password":"123456"
      * }
      *
      * {
      *     "id": 2,
-     *     "username": "evilsniper",
-     *     "email": "evilsniper@sina.cn",
+     *     "username": "sniper",
+     *     "email": "sniper@sina.cn",
      *     "roles": [
      *         "ROLE_USER"
      *     ]

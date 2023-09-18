@@ -26,13 +26,13 @@ public class AuthController {
      *
      * negative case of request:
      * {
-     *     "username":"evilsniper",
+     *     "username":"sniper",
      *     "password":"123457"
      * }
      * ----------------------------------------------------
      * positive case of request:
      * {
-     *     "username":"evilsniper",
+     *     "username":"sniper",
      *     "password":"123456"
      * }
      *
@@ -63,8 +63,8 @@ public class AuthController {
     /**
      * e.g. POST http://127.0.0.1:8080/api/v1/auth/register
      * {
-     *     "username":"evilsniper",
-     *     "email":"evilsniper@sina.cn",
+     *     "username":"sniper",
+     *     "email":"sniper@sina.cn",
      *     "password":"123456",
      *     "role":["admin"]
      * }
