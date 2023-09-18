@@ -25,13 +25,13 @@ public class AppUser {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotBlank
+    @NotBlank(message = "The username cannot be blank")
     @Size(max = 20)
     private String username;
 
-    @NotBlank
+    @NotBlank(message = "The username field cannot be blank")
     @Size(max = 50)
-    @Email
+    @Email(message = "The email format is illegal")
     private String email;
 
     @NotBlank

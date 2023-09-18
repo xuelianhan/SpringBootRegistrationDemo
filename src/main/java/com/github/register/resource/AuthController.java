@@ -23,25 +23,31 @@ public class AuthController {
 
     /**
      * e.g. POST http://127.0.0.1:8080/api/v1/auth/login
-     * negative case:
+     *
+     * negative case of request:
      * {
      *     "username":"evilsniper",
      *     "password":"123457"
      * }
      * ----------------------------------------------------
-     * positive case:
+     * positive case of request:
      * {
      *     "username":"evilsniper",
      *     "password":"123456"
      * }
      *
+     * positive case of response:
      * {
-     *     "id": 2,
-     *     "username": "evilsniper",
-     *     "email": "evilsniper@sina.cn",
-     *     "roles": [
-     *         "ROLE_USER"
-     *     ]
+     *     "code": 0,
+     *     "message": "ok",
+     *     "data": {
+     *         "id": 4,
+     *         "username": "elonmusk",
+     *         "email": "elonmusk@tesla.com",
+     *         "roles": [
+     *             "ROLE_ADMIN"
+     *         ]
+     *     }
      * }
      *
      * Test is OK.
@@ -77,6 +83,17 @@ public class AuthController {
      * The cookie is cleared while logout happens.
      * e.g. POST http://127.0.0.1:8080/api/v1/auth/logout
      * Test is OK.
+     *
+     * positive case of response:
+     * {
+     *     "code": 0,
+     *     "message": "ok",
+     *     "data": {
+     *         "code": 0,
+     *         "message": "You've been logged out!",
+     *         "data": null
+     *     }
+     * }
      *
      * @return
      */

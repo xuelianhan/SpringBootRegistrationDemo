@@ -14,10 +14,16 @@ import java.util.Optional;
 @Repository
 public interface AppUserRepository extends CrudRepository<AppUser, Integer> {
 
+
+
     @Override
     List<AppUser> findAll();
 
     List<AppUser> findByIdIn(Collection<Integer> ids);
+
+    boolean existsByUsernameOrEmail(String username, String email);
+
+    Collection<AppUser> findByUsernameOrEmail(String username, String email);
 
     List<AppUser> findByDeletedEquals(Integer deleted);
 
@@ -28,6 +34,8 @@ public interface AppUserRepository extends CrudRepository<AppUser, Integer> {
     Boolean existsByUsername(String username);
 
     Boolean existsByEmail(String email);
+
+    <S extends AppUser> S save(S entity);
 
 
 }

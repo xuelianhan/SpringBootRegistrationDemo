@@ -1,6 +1,7 @@
 package com.github.register.infrastructure.server;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.register.domain.payload.response.CodeMessage;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -26,18 +27,15 @@ public class AuthEntryPointJWT implements AuthenticationEntryPoint {
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-        log.error("Unauthorized error: {}", authException.getMessage());
+        log.error("Unauthorized error: {}, Path:{}", authException.getMessage(), request.getServletPath());
 
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-
-        final Map<String, Object> body = new HashMap<>();
-        body.put("status", HttpServletResponse.SC_UNAUTHORIZED);
-        body.put("error", "Unauthorized");
-        body.put("message", authException.getMessage());
-        body.put("path", request.getServletPath());
+        CodeMessage codeMessage = new CodeMessage();
+        codeMessage.setCode(HttpServletResponse.SC_UNAUTHORIZED);
+        codeMessage.setMessage("Unauthorized Access! Please check your Path or your authorization.");
 
         final ObjectMapper mapper = new ObjectMapper();
-        mapper.writeValue(response.getOutputStream(), body);
+        mapper.writeValue(response.getOutputStream(), codeMessage);
     }
 }

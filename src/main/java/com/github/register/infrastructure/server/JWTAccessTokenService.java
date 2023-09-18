@@ -14,6 +14,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.util.WebUtils;
 
 import java.security.Key;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
 /**
@@ -23,7 +25,7 @@ import java.util.Date;
 @Component
 public class JWTAccessTokenService {
 
-    private static final Logger logger = LoggerFactory.getLogger(JWTAccessTokenService.class);
+    private static final Logger log = LoggerFactory.getLogger(JWTAccessTokenService.class);
 
     @Value("${register.app.jwtCookieName}")
     private String jwtCookie;
@@ -31,8 +33,8 @@ public class JWTAccessTokenService {
     @Value("${register.app.jwtSecret}")
     private String jwtSecret;
 
-    @Value("${register.app.jwtExpirationMs}")
-    private int jwtExpirationMs;
+    @Value("${register.app.jwtExpirationMinute}")
+    private int jwtExpirationMinute;
 
     public String getJwtFromCookies(HttpServletRequest request) {
         Cookie cookie = WebUtils.getCookie(request, jwtCookie);
@@ -72,23 +74,29 @@ public class JWTAccessTokenService {
             Jwts.parserBuilder().setSigningKey(key()).build().parse(authToken);
             return true;
         } catch (MalformedJwtException e) {
-            logger.error("Invalid JWT token: {}", e.getMessage());
+            log.error("Invalid JWT token: {}", e.getMessage());
         } catch (ExpiredJwtException e) {
-            logger.error("JWT token is expired: {}", e.getMessage());
+            log.error("JWT token is expired: {}", e.getMessage());
         } catch (UnsupportedJwtException e) {
-            logger.error("JWT token is unsupported: {}", e.getMessage());
+            log.error("JWT token is unsupported: {}", e.getMessage());
         } catch (IllegalArgumentException e) {
-            logger.error("JWT claims string is empty: {}", e.getMessage());
+            log.error("JWT claims string is empty: {}", e.getMessage());
         }
 
         return false;
     }
 
     public String generateTokenFromUsername(String username) {
+        Instant issuedAt = Instant.now().truncatedTo(ChronoUnit.SECONDS);
+        Instant expiration = issuedAt.plus(jwtExpirationMinute, ChronoUnit.MINUTES);
+
+        log.info("The token for user:{} is issued at: {}", username, issuedAt);
+        log.info("The token for user:{} will expire at: {}", username, expiration);
+
         return Jwts.builder()
                 .setSubject(username)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
+                .setIssuedAt(Date.from(issuedAt))
+                .setExpiration(Date.from(expiration))
                 .signWith(key(), SignatureAlgorithm.HS256)
                 .compact();
     }

@@ -25,7 +25,7 @@ register:
   app:
     jwtCookieName: registerDemoJwt
     jwtSecret: LM22cp1O75xadIIrSee10adc3949ba59abbe56e057f20f883e7c121ff53bf6245f24d36e0a10481f56kmweLEmEu6PY
-    jwtExpirationMs: 1800000
+    jwtExpirationMinute: 5
 
 logging:
   pattern:

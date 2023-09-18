@@ -1,5 +1,6 @@
 package com.github.register.application;
 
+import com.github.register.domain.payload.request.UserInfoRequest;
 import com.github.register.domain.user.AppUser;
 import com.github.register.domain.user.AppUserRepository;
 import com.github.register.domain.user.DeletedStatusEnum;
@@ -28,6 +29,19 @@ public class UserAppService {
 
     public List<AppUser> findAllUsers() {
         return appUserRepository.findAll();
+    }
+
+    public AppUser edit(Integer id, UserInfoRequest userInfoRequest) {
+        Optional<AppUser> op = appUserRepository.findById(id);
+        AppUser cur = null;
+        if (op.isPresent()) {
+            cur = op.get();
+            cur.setDeleted(userInfoRequest.getDeleted());
+            cur.setUsername(userInfoRequest.getUsername());
+            cur.setEmail(userInfoRequest.getEmail());
+            appUserRepository.save(cur);
+        }
+        return cur;
     }
 
     public void markAccountDeletedById(Integer id) {

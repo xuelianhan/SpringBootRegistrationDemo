@@ -40,8 +40,12 @@ public abstract class CommonResponse {
                 .body(codeMessage);
     }
 
-    private static <T> ResponseEntity<T> send(T body) {
-        return ResponseEntity.ok().body(body);
+    private static <T> ResponseEntity<CodeMessage<T>> send(T body) {
+        CodeMessage codeMessage = new CodeMessage(CodeMessage.CODE_SUCCESS, "ok");
+        codeMessage.setData(body);
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(codeMessage);
     }
 
     public static ResponseEntity badRequest(String message) {
@@ -64,11 +68,11 @@ public abstract class CommonResponse {
         return send(headerName, headerValues, body);
     }
 
-    public static <T> ResponseEntity<T> success(T body) {
+    public static <T> ResponseEntity<CodeMessage<T>> success(T body) {
         return send(body);
     }
 
-    public static <T> ResponseEntity<T> run(Supplier<T> s) {
+    public static <T> ResponseEntity<CodeMessage<T>> run(Supplier<T> s) {
         try {
             T data = s.get();
             return success(data);

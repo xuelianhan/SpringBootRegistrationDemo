@@ -4,7 +4,7 @@ package com.github.register.domain.payload.response;
  * @author sniper
  * @date 17 Sep 2023
  */
-public class CodeMessage {
+public class CodeMessage<T> {
     /**
      * Signs of Success
      */
@@ -16,7 +16,7 @@ public class CodeMessage {
 
     private Integer code;
     private String message;
-    private Object data;
+    private T data;
 
     public CodeMessage() {}
 
@@ -41,11 +41,11 @@ public class CodeMessage {
         this.message = message;
     }
 
-    public Object getData() {
+    public T getData() {
         return data;
     }
 
-    public void setData(Object data) {
+    public void setData(T data) {
         this.data = data;
     }
 }
