@@ -17,7 +17,7 @@ new Vue({
             };
 
             // Make a POST request to your backend registration endpoint
-            axios.post('http://127.0.0.1:8080/restful/accounts/user', userData)
+            axios.post('http://127.0.0.1:8080/api/v1/auth/register', userData)
                 .then(response => {
                     // Handle the response from the backend
                     console.log('Registration successful:', response.data);
