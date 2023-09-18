@@ -1,10 +1,5 @@
 package com.github.register.resource;
 
-import com.github.register.application.EmailService;
-import com.github.register.domain.mail.Email;
-import com.github.register.domain.payload.response.CodeMessage;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,9 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1/test")
 public class TestController {
-
-    @Autowired
-    private EmailService emailService;
 
     /**
      * e.g. GET http://127.0.0.1:8080/api/v1/test/all
@@ -87,26 +79,6 @@ public class TestController {
     public String adminAccess() {
         // test content for admin user.
         return "Admin Board.";
-    }
-
-    /**
-     * e.g. GET http://127.0.0.1:8080/api/v1/test/sendMail
-     * @return
-     */
-    @GetMapping("/sendMail")
-    public ResponseEntity<?> sendMail() {
-        try {
-            String to = "to_a@gmail.com";
-            String content = "test test test";
-            Email email = new Email();
-
-            emailService.sendSimpleMessage(email);
-        } catch (Exception e) {
-
-            return ResponseEntity.badRequest().body(new CodeMessage(-1, "Error: Email sent failed!"));
-        }
-
-        return ResponseEntity.ok(new CodeMessage(0, "Email has sent successfully!"));
     }
 
 }
