@@ -20,10 +20,7 @@ Additional functions
 ## How to run?
 - Running with Docker：
 > ```bash
-> $ mvnw package
-or using:
 > $ mvn clean package -Dmaven.test.skip=true
-
 > $ docker build --build-arg=target/*.jar -t register-demo .
 > $ docker image ls
 > $ docker run -d -p 8080:8080 register-demo
