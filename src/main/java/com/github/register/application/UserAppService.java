@@ -36,12 +36,16 @@ public class UserAppService {
         AppUser cur = null;
         if (op.isPresent()) {
             cur = op.get();
-            cur.setDeleted(userInfoRequest.getDeleted());
-            cur.setUsername(userInfoRequest.getUsername());
-            cur.setEmail(userInfoRequest.getEmail());
+            updateUserFromRequest(cur, userInfoRequest);
             appUserRepository.save(cur);
         }
         return cur;
+    }
+
+    private void updateUserFromRequest(AppUser user, UserInfoRequest userInfoRequest) {
+        user.setDeleted(userInfoRequest.getDeleted());
+        user.setUsername(userInfoRequest.getUsername());
+        user.setEmail(userInfoRequest.getEmail());
     }
 
     public void markAccountDeletedById(Integer id) {

@@ -12,13 +12,42 @@ public class UserInfoResponse {
     private String username;
     private String email;
     private List<String> roles;
+    private UserInfoResponse() {}
 
-    public UserInfoResponse(Integer id, String username, String email, List<String> roles) {
-        this.id = id;
+    public static class Builder {
+        private Integer id;
+        private String username;
+        private String email;
+        private List<String> roles;
+
+        public Builder id(Integer id) {
+            this.id = id;
+            return this;
+        }
+    public Builder username(String username) {
         this.username = username;
-        this.email = email;
-        this.roles = roles;
+        return this;
     }
+
+    public Builder email(String email) {
+        this.email = email;
+        return this;
+    }
+
+    public Builder roles(List<String> roles) {
+        this.roles = roles;
+        return this;
+    }
+
+    public UserInfoResponse build() {
+        UserInfoResponse response = new UserInfoResponse();
+        response.id = this.id;
+        response.username = this.username;
+        response.email = this.email;
+        response.roles = this.roles;
+        return response;
+    }
+}
 
     public Integer getId() {
         return id;

@@ -68,12 +68,14 @@ public class AccountAppService {
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
 
-        UserInfoResponse body = new UserInfoResponse(userDetails.getId(),
-                userDetails.getUsername(),
-                userDetails.getEmail(),
-                roles);
+        UserInfoResponse userInfo = new UserInfoResponse.Builder()
+                .id(userDetails.getId())
+                .username(userDetails.getUsername())
+                .email(userDetails.getEmail())
+                .roles(roles)
+                .build();
 
-        return CommonResponse.success(HttpHeaders.SET_COOKIE, jwtCookie.toString(), body);
+        return CommonResponse.success(HttpHeaders.SET_COOKIE, jwtCookie.toString(), userInfo);
     }
 
 
@@ -95,29 +97,11 @@ public class AccountAppService {
         Set<String> strRoles = registerRequest.getRole();
         Set<AuthRole> roles = new HashSet<>();
 
-        AuthRole authRole = null;
         if (strRoles == null || strRoles.isEmpty()) {
-            authRole = authRoleRepository.findByRoleName(RoleEnum.ROLE_USER)
-                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-            roles.add(authRole);
+            roles.add(findRole(RoleEnum.ROLE_USER));
         } else {
             for (String role : strRoles) {
-                switch (role) {
-                    case "ROLE_ADMIN":
-                        authRole = authRoleRepository.findByRoleName(RoleEnum.ROLE_ADMIN)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(authRole);
-                        break;
-                    case "ROLE_MODERATOR":
-                        authRole = authRoleRepository.findByRoleName(RoleEnum.ROLE_MODERATOR)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(authRole);
-                        break;
-                    default:
-                        authRole = authRoleRepository.findByRoleName(RoleEnum.ROLE_USER)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(authRole);
-                }
+                roles.add(findRole(RoleEnum.getRoleEnum(role)));
             }
         }
 
@@ -128,6 +112,11 @@ public class AccountAppService {
         eventPublisher.publishEvent(new UserRegistrationEvent(this, user.getUsername(), user.getEmail()));
 
         return CommonResponse.success("User registered successfully!");
+    }
+
+    private AuthRole findRole(RoleEnum roleEnum) {
+        return authRoleRepository.findByRoleName(roleEnum)
+                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
     }
 
     public ResponseEntity<?> logout() {
