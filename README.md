@@ -18,10 +18,17 @@ Additional functions
    that were sent.
 
 ## How to run?
-- Running with Docker：
+- Running with Docker:
 > ```bash
 > $ mvn clean package -Dmaven.test.skip=true
 > $ docker build --build-arg=target/*.jar -t register-demo .
 > $ docker image ls
 > $ docker run -d -p 8080:8080 register-demo
-> 
+ - You can make it executable by running the following command:
+> $ chmod +x build_and_run.sh
+ - To build and run the Spring Boot application, you can simply run the bash script file as follows:
+> $ ./build_and_run.sh
+
+This will compile the application, build a Docker image from the compiled application, 
+and then run the Docker image in detached mode, exposing port 8080 on the host machine. 
+You should then be able to access the application at http://localhost:8080
