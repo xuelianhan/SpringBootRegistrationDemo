@@ -26,7 +26,7 @@ CREATE TABLE `auth_user_role` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-CREATE TABLE IF NOT EXISTS `confirmation_token` (
+CREATE TABLE IF NOT EXISTS `confirm_token` (
     `id`           int(10) unsigned NOT NULL AUTO_INCREMENT,
     `token`        VARCHAR(100),
     `created_at`   timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,

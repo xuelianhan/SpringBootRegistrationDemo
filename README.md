@@ -1,4 +1,4 @@
-# register-demo
+## register-demo
 A Spring-Boot Demo of registering with email
 This project has implemented a backend API to register a user, it can also
 edit/read/soft delete single or multiple users.
@@ -16,6 +16,11 @@ Additional functions
 3. Performance testing
 4. UI to register, edit, deactivate, show existing registered users and view all emails
    that were sent.
+
+## Database of MySQL preparation
+Replace database configurations with yours in the application.yaml file.
+To create tables by the sql files in the resource directory, 
+then run the insert.sql file to insert data into the tables.
 
 ## How to run?
 - Running with Docker:
