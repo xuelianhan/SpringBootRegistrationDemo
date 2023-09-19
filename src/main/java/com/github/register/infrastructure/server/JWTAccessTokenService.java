@@ -27,6 +27,8 @@ public class JWTAccessTokenService {
 
     private static final Logger log = LoggerFactory.getLogger(JWTAccessTokenService.class);
 
+    private static final long MAX_AGE_SEC = 24 * 60 * 60;
+
     @Value("${register.app.jwtCookieName}")
     private String jwtCookie;
 
@@ -36,26 +38,22 @@ public class JWTAccessTokenService {
     @Value("${register.app.jwtExpirationMinute}")
     private int jwtExpirationMinute;
 
+
     public String getJwtFromCookies(HttpServletRequest request) {
         Cookie cookie = WebUtils.getCookie(request, jwtCookie);
-        if (cookie != null) {
-            return cookie.getValue();
-        } else {
-            return null;
-        }
+        return (cookie == null ? null : cookie.getValue());
     }
 
     public ResponseCookie generateJwtCookie(AuthenticAppUser userPrincipal) {
         String jwt = generateTokenFromUsername(userPrincipal.getUsername());
         return ResponseCookie.from(jwtCookie, jwt)
                 .path("/api")
-                .maxAge(24 * 60 * 60)
+                .maxAge(MAX_AGE_SEC)
                 .httpOnly(true).build();
     }
 
     public ResponseCookie getCleanJwtCookie() {
-        ResponseCookie cookie = ResponseCookie.from(jwtCookie, null).path("/api").build();
-        return cookie;
+        return ResponseCookie.from(jwtCookie, null).path("/api").build();
     }
 
     public String getUserNameFromJwtToken(String token) {
@@ -93,7 +91,7 @@ public class JWTAccessTokenService {
         Instant expiration = issuedAt.plus(jwtExpirationMinute, ChronoUnit.MINUTES);
 
         log.info("The token for user:{} is issued at: {}, and will expire at:{} ", username, issuedAt, expiration);
-        
+
         return Jwts.builder()
                 .setSubject(username)
                 .setIssuedAt(Date.from(issuedAt))
