@@ -92,9 +92,8 @@ public class JWTAccessTokenService {
         Instant issuedAt = Instant.now().truncatedTo(ChronoUnit.SECONDS);
         Instant expiration = issuedAt.plus(jwtExpirationMinute, ChronoUnit.MINUTES);
 
-        log.info("The token for user:{} is issued at: {}", username, issuedAt);
-        log.info("The token for user:{} will expire at: {}", username, expiration);
-
+        log.info("The token for user:{} is issued at: {}, and will expire at:{} ", username, issuedAt, expiration);
+        
         return Jwts.builder()
                 .setSubject(username)
                 .setIssuedAt(Date.from(issuedAt))
